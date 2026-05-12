@@ -1,0 +1,2 @@
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts';
+export function ChartCard({title,data,dataKey}:{title:string;data:any[];dataKey:string}){return <div className='bg-white rounded p-4 shadow h-72'><h3 className='font-semibold mb-2'>{title}</h3><div className='h-56'><ResponsiveContainer width='100%' height='100%'><BarChart data={data}><XAxis dataKey='name'/><YAxis/><Tooltip/><Bar dataKey={dataKey} fill='#2563eb' /></BarChart></ResponsiveContainer></div></div>}

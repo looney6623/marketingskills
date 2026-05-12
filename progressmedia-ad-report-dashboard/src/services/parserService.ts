@@ -1,0 +1,6 @@
+import * as XLSX from 'xlsx';
+import { AdRecord, Medium } from '../types/models';
+const detect=(name:string,headers:string[]):Medium|undefined=>{const n=name.toLowerCase();const h=headers.join(' ').toLowerCase(); if(n.includes('meta')||h.includes('facebook')) return 'meta'; if(n.includes('gfa')||h.includes('gfa')) return 'naver-gfa'; if(n.includes('da')||h.includes('display')) return 'naver-da'; if(n.includes('sa')||h.includes('search')) return 'naver-sa'; return undefined;};
+export const parserService={
+ parseFile:async(file:File,forced?:Medium)=>{const buf=await file.arrayBuffer();const wb=XLSX.read(buf);const ws=wb.Sheets[wb.SheetNames[0]];const rows=XLSX.utils.sheet_to_json<Record<string, any>>(ws); const headers=Object.keys(rows[0]??{}); const medium=forced??detect(file.name,headers); if(!medium) throw new Error('판별 실패: 매체 선택 필요'); return rows.map((r,i):AdRecord=>({id:crypto.randomUUID()+i,date:String(r.date??r.일시??''),campaign:String(r.campaign??r.캠페인??''),adGroup:String(r.adGroup??r.광고그룹??''),impressions:Number(r.impressions??r.노출??0),clicks:Number(r.clicks??r.클릭??0),cost:Number(r.cost??r.비용??0),conversions:Number(r.conversions??r.전환??0),revenue:Number(r.revenue??r.매출??0),medium,campaignType:medium.startsWith('naver')?medium.replace('naver-','').toUpperCase():'META'})); }
+};

@@ -1,0 +1,1 @@
+export function KpiCards({k}:{k:any}){return <div className='grid grid-cols-2 md:grid-cols-5 gap-3'>{[['노출',k.imp],['클릭',k.clicks],['비용',k.cost],['전환',k.conv],['매출',k.rev]].map(([l,v])=><div key={String(l)} className='bg-white rounded p-3 shadow'><p className='text-xs'>{l}</p><p className='font-bold'>{Number(v).toLocaleString()}</p></div>)}</div>}
